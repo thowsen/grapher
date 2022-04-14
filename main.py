@@ -14,7 +14,7 @@ def make_graph(num_nodes, format, filename):
 
     for v in vertices:
         dot.node(f"P{v}", f"P{v}", shape="circle")
-    sinkNode= f"P{vertices[len(vertices)-1]}"
+    sinkNode = f"P{vertices[len(vertices)-1]}"
     dot.node(sinkNode, sinkNode, shape='doublecircle')
 
     for v, e in graph.items():
@@ -42,7 +42,7 @@ def main(argv):
         else:
             print(f"unknown option {opt} with argument {arg}")
             exit(1)
-    
+
     make_graph(vertices, format, filename).render()
 
 

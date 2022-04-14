@@ -1,7 +1,7 @@
 from random import random, choice
 
 # lots of optimization can be done. However, performance is adequite,
-# for my purposes (up to 250 is ok.). 
+# for my purposes (up to 250 is ok.).
 # main culprit is search_patcher which only adds a single node each iteration.
 
 # sacrificing some randomness by tieing together identified partisions increases
@@ -23,7 +23,7 @@ def random_undirected_graph(num_nodes):
                 edges[v].append(n)
 
     # connects a partitioned graph.
-    graph = search_patch(edges)
+    graph = _search_patch(edges)
 
     # to undirected graph.
     for v, es in graph.items():
@@ -49,21 +49,25 @@ def random_directed_graph(num_nodes):
     return undirected_graph
 
 
-# patches partition by performing graph search. If partitions are detected,
-# a random edge is inserted and the procedure is called upon once again.
-# extremely ineffeicient but decent for randomness.
-def search_patch(graph):
+def _search_patch(graph):
+    """
+    patches partition by performing graph search. If partitions are detected,
+    a random edge is inserted and the procedure is called upon once again.
+    extremely ineffeicient but decent for randomness.
+    """
     vertices = list(graph.keys())
     while True:
         v = choice(vertices)
         neighbours = [v]
         visited = []
+        # check whether all nodes may be reached.
         while len(neighbours) > 0:
             curr = neighbours.pop()
             visited.append(curr)
             neighbours = neighbours + graph[curr]
             neighbours = list(filter(lambda a: not a in visited, neighbours))
 
+        # if lengths are equal then the graph is connected.
         if len(visited) == len(graph):
             return graph
 
